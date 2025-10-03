@@ -8,6 +8,7 @@ spec:
     - git:
         repoURL: https://github.com/tonyrizzotto/argocd-charts.git
         revision: main
+        requeueAfterSeconds: 15          # poll for changes every 15 seconds
         directories:
           - path: apps/dev/*             # each folder is a service
   template:
