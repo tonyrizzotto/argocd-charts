@@ -1,11 +1,13 @@
 nameOverride: service-b
 image:
-  repository: nginx
+  repository: nginxinc/nginx-unprivileged
   tag: "1.25-alpine"
-containerPort: 80
+containerPort: 8080
 service:
   port: 80
-env: []
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 101
 livenessProbe:
   httpGet: { path: /, port: http }
 readinessProbe:
@@ -14,7 +16,4 @@ resources:
   requests: { cpu: "100m", memory: "128Mi" }
   limits:   { cpu: "500m", memory: "256Mi" }
 hpa:
-  enabled: true
-  minReplicas: 2
-  maxReplicas: 4
-  targetCPUUtilizationPercentage: 70
+  enabled: false

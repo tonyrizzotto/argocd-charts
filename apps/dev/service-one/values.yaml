@@ -2,18 +2,21 @@ nameOverride: service-a
 image:
   repository: hashicorp/http-echo
   tag: "0.2.3"
-containerPort: 5678
+containerPort: 8080
 service:
   port: 80
-env:
-  - name: TEXT
-    value: "hello from service-a (dev)"
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+args:
+  - "-text=hello from service-a (dev)"
+  - "-listen=:8080"
 livenessProbe:
   httpGet: { path: /, port: http }
 readinessProbe:
   httpGet: { path: /, port: http }
 resources:
-  requests: { cpu: "50m", memory: "64Mi" }
+  requests: { cpu: "50m",  memory: "64Mi" }
   limits:   { cpu: "200m", memory: "128Mi" }
 hpa:
   enabled: false

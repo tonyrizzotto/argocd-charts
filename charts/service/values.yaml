@@ -1,6 +1,8 @@
 nameOverride: ""
 fullnameOverride: ""
 
+args: []
+
 replicaCount: 2
 
 image:
