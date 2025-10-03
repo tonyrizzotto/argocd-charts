@@ -9,7 +9,7 @@ spec:
         repoURL: https://github.com/tonyrizzotto/argocd-charts.git
         revision: main
         directories:
-          - path: apps/dev/*     # <- each subfolder = one app
+          - path: apps/dev/*             # each folder is a service
   template:
     metadata:
       name: '{{path.basename}}-dev'
@@ -19,9 +19,10 @@ spec:
       source:
         repoURL: https://github.com/tonyrizzotto/argocd-charts.git
         targetRevision: main
-        path: apps/dev/{{path.basename}}   # <- point to that subfolder
-        directory:
-          recurse: true
+        path: charts/service             # shared chart
+        helm:
+          valueFiles:
+            - apps/dev/{{path.basename}}/values.yaml
       destination:
         server: https://kubernetes.default.svc
         namespace: dev
