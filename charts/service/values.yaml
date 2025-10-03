@@ -1,8 +1,6 @@
 nameOverride: ""
 fullnameOverride: ""
 
-args: []
-
 replicaCount: 2
 
 image:
@@ -24,12 +22,6 @@ resources:
     cpu: "500m"
     memory: "256Mi"
 
-podAnnotations: {}
-podLabels: {}
-nodeSelector: {}
-tolerations: []
-affinity: {}
-
 # health checks (required by schema)
 livenessProbe:
   httpGet:
@@ -41,8 +33,11 @@ readinessProbe:
     port: http
 
 # security defaults (tighten as needed)
-securityContext:
+podSecurityContext:
   runAsNonRoot: true
+  runAsUser: 1000
+
+containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -59,5 +54,9 @@ pdb:
   enabled: true
   maxUnavailable: 1
 
-env: []          # e.g., [{name: APP_ENV, value: dev}]
-envFrom: []      # e.g., [{configMapRef:{name: x}}, {secretRef:{name: y}}]
+env: []
+envFrom: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
+args: []
