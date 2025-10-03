@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/<you>/<repo>.git   # <-- change me
+    repoURL: https://github.com/tonyrizzotto/argocd-charts.git
     targetRevision: main
     path: apps/dev/mock-service
     directory:
