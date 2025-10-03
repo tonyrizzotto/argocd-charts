@@ -1,22 +1,33 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Application
+kind: ApplicationSet
 metadata:
-  name: mock-service
+  name: env-dev
   namespace: argocd
 spec:
-  project: default
-  source:
-    repoURL: https://github.com/tonyrizzotto/argocd-charts.git
-    targetRevision: main
-    path: apps/dev/service-one
-    directory:
-      recurse: true
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: dev
-  syncPolicy:
-    automated:
-      prune: true        # remove orphaned resources on sync
-      selfHeal: true     # correct drift automatically
-    syncOptions:
-      - CreateNamespace=true
+  generators:
+    - git:
+        repoURL: https://github.com/tonyrizzotto/argocd-charts.git
+        revision: main
+        directories:
+          - path: apps/dev/*     # <- each subfolder = one app
+  template:
+    metadata:
+      name: '{{path.basename}}-dev'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/tonyrizzotto/argocd-charts.git
+        targetRevision: main
+        path: apps/dev/{{path.basename}}   # <- point to that subfolder
+        directory:
+          recurse: true
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: dev
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
